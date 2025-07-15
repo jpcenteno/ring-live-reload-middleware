@@ -6,26 +6,32 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
-  outputs = { self, nixpkgs, systems, treefmt-nix }:
-  let
-    eachSystem = f: nixpkgs.lib.genAttrs (import systems) (system: f nixpkgs.legacyPackages.${system});
-          treefmtEval = eachSystem (pkgs: treefmt-nix.lib.evalModule pkgs ./treefmt.nix);
-  in
-  {
-    devShells = eachSystem (pkgs: {
-      default = pkgs.mkShell {
-        packages = with pkgs; [
-          clojure
-          clojure-lsp
-        ];
-      };
-    });
+  outputs =
+    {
+      self,
+      nixpkgs,
+      systems,
+      treefmt-nix,
+    }:
+    let
+      eachSystem = f: nixpkgs.lib.genAttrs (import systems) (system: f nixpkgs.legacyPackages.${system});
+      treefmtEval = eachSystem (pkgs: treefmt-nix.lib.evalModule pkgs ./treefmt.nix);
+    in
+    {
+      devShells = eachSystem (pkgs: {
+        default = pkgs.mkShell {
+          packages = with pkgs; [
+            clojure
+            clojure-lsp
+          ];
+        };
+      });
 
-          formatter = eachSystem (pkgs: treefmtEval.${pkgs.system}.config.build.wrapper);
+      formatter = eachSystem (pkgs: treefmtEval.${pkgs.system}.config.build.wrapper);
 
-          checks = eachSystem (pkgs: {
+      checks = eachSystem (pkgs: {
         formatting = treefmtEval.${pkgs.system}.config.build.check self;
       });
 
-  };
+    };
 }
