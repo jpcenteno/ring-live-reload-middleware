@@ -1,0 +1,3 @@
+#kaocha/v1
+ {:plugins [:orchestra]
+  :reporter [kaocha.report/documentation]}
