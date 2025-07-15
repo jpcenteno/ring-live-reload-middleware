@@ -1,0 +1,26 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  check-and-test:
+    name: "Check and test"
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Nix
+        uses: cachix/install-nix-action@v27
+
+      - name: Run flake checks
+        run: "nix flake check"
