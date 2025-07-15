@@ -1,0 +1,5 @@
+#! /usr/bin/env bash
+
+# FIXME Setup Kaocha, then append the :test alias.
+# clj -M:nrepl:test -m nrepl.cmdline --interactive
+clj -M:nrepl -m nrepl.cmdline --interactive
