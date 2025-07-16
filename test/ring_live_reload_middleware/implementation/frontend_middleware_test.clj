@@ -17,8 +17,11 @@
         parameter ["" "; charset=utf-8" "; charset=UTF-8" "; charset=ISO-8859-1"]]
     (str prefix parameter)))
 
+; FIXME Re-include XHTML "application/xhtml+xml". I left it out because
+; injecting code on XHTML is slightly more complex than including it on HTML5.
+
 (def valid-html-content-types
-  (extend-content-types-collection ["text/html" "application/xhtml+xml"]))
+  (extend-content-types-collection ["text/html"]))
 
 (def non-html-content-types
   (extend-content-types-collection
