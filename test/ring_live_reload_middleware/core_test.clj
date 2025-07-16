@@ -1,33 +1,35 @@
 (ns ring-live-reload-middleware.core-test
   (:require [clojure.test :refer [deftest is testing]]
             [ring-live-reload-middleware.core :as sut]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [ring-live-reload-middleware.implementation.frontend-middleware-test :as frontend-middleware-test]))
 
 ; ╔════════════════════════════════════════════════════════════════════════╗
 ; ║ Test responses                                                         ║
 ; ╚════════════════════════════════════════════════════════════════════════╝
 
-(def plaintext-response
-  {:status  200
-   :headers {"Content-Type" "text/plain"}
-   :body    "Hello"})
+(def plaintext-responses
+  (for [content-type frontend-middleware-test/non-html-content-types]
+    {:status  200
+     :headers {"Content-Type" content-type}
+     :body    "Hello"}))
 
 ;; A collection of different formats of valid (ish) html responses.
 (def html-responses
-  (for [content-type ["text/html" "text/html; charset=utf-8"]
-        m      [{:description "well-formed HTML file"
-                 :body        "<!DOCTYPE html><html><head></head><body>Hello HTML</body></html>"}
-                {:description "HTML file without a <head> tag"
-                 :body        "<!DOCTYPE html><html><body>Hello HTML</body></html>"}
-                {:description "HTML file without a <body> tag"
-                 :body        "<!DOCTYPE html><html><head></head></html>"}
-                {:description "File without any HTML tags at all"
-                 :body        "Hello"}]]
+  (for [content-type frontend-middleware-test/valid-html-content-types
+        body-meta    [{:description "well-formed HTML file"
+                       :body        "<!DOCTYPE html><html><head></head><body>Hello HTML</body></html>"}
+                      {:description "HTML file without a <head> tag"
+                       :body        "<!DOCTYPE html><html><body>Hello HTML</body></html>"}
+                      {:description "HTML file without a <body> tag"
+                       :body        "<!DOCTYPE html><html><head></head></html>"}
+                      {:description "File without any HTML tags at all"
+                       :body        "Hello"}]]
 
     {:status      200
      :headers     {"Content-Type" content-type}
-     :body        (:body m)
-     :description (format "%s with Content-Type `%s`" (:description m) content-type)}))
+     :body        (:body body-meta)
+     :description (format "%s with Content-Type `%s`" (:description body-meta) content-type)}))
 
 ; ╔════════════════════════════════════════════════════════════════════════╗
 ; ║ Test helpers                                                           ║
@@ -46,11 +48,15 @@
 ; ╚════════════════════════════════════════════════════════════════════════╝
 
 (deftest wrap-live-reload-test
-  (testing "When the handler returns a plaintext response:"
-    (let [handler (-> (fn [_request] plaintext-response)
-                      (sut/wrap-live-reload :fixme-reloader))]
-      (testing "The middleware does nothing:"
-        (is (= plaintext-response (handler :not-a-request-but-it-should-not-matter))))))
+  (testing "When wrapping a handler that returns a plaintext response"
+    (doseq [response plaintext-responses
+            :let
+            [content-type (get-in response [:headers "Content-Type"])]]
+      (testing (format  "With `Content-Type` set to `%s`:" content-type)
+        (let [handler (-> (fn [_request] response)
+                          (sut/wrap-live-reload :fixme-reloader))]
+          (testing "The middleware does nothing."
+            (is (= response (handler :not-a-request-but-it-should-not-matter))))))))
 
   ;; Repeat the same tests for different forms of HTML responses that should be
   ;; supported.
