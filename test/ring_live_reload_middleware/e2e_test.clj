@@ -1,7 +1,6 @@
 (ns ring-live-reload-middleware.e2e-test
   (:require [clojure.test :refer [deftest is testing]]
             [ring-live-reload-middleware.core :as sut]
-            [clojure.string :as str]
             [etaoin.api :as etaoin]
             [ring.adapter.jetty :as jetty]
             [ring-live-reload-middleware.core-test :as core-test]))
@@ -10,11 +9,6 @@
   {:status  200
    :headers {"Content-Type" "text/plain"}
    :body    "Hello"})
-
-(def html-response
-  {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body    "<!DOCTYPE html><html><head></head><body>Hello HTML</body></html>"})
 
 (defn with-server [& {:keys [handler callback]}]
   (let [port   (+ 8000 (rand-int 1000))
