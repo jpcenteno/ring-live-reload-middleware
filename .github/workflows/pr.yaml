@@ -24,3 +24,6 @@ jobs:
 
       - name: Run flake checks
         run: "nix flake check"
+
+      - name: Run tests
+        run: "nix develop --command -- ./scripts/test"
