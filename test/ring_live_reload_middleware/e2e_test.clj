@@ -69,6 +69,4 @@
             (etaoin/go driver url)
 
             (testing "The middleware injects a <script> tag"
-              (clojure.pprint/pprint {:response response
-                                      :src      (etaoin/get-source driver)})
               (is (etaoin/exists? driver {:tag "script"})))))))))
