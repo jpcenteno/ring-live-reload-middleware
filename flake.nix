@@ -23,6 +23,8 @@
           packages = with pkgs; [
             clojure
             clojure-lsp
+            ungoogled-chromium
+            chromedriver
           ];
         };
       });
