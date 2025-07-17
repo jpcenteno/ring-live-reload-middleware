@@ -8,4 +8,9 @@
             :extra-deps {lambdaisland/kaocha     {:mvn/version "1.91.1392"}
                          orchestra/orchestra     {:mvn/version "2021.01.01-1"}
                          etaoin/etaoin           {:mvn/version "1.1.43"}
-                         ring/ring-jetty-adapter {:mvn/version "1.14.1"}}}}}
+                         ring/ring-jetty-adapter {:mvn/version "1.14.1"}}}
+
+           :build-cljs
+           {:extra-paths ["src/cljs"]
+            :extra-deps {thheller/shadow-cljs {:mvn/version "3.1.7"}}
+            :main-opts  ["-m" "shadow.cljs.devtools.cli"]}}}
