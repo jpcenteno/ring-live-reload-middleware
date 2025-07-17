@@ -3,7 +3,8 @@
             [ring-live-reload-middleware.core :as sut]
             [etaoin.api :as etaoin]
             [ring.adapter.jetty :as jetty]
-            [ring-live-reload-middleware.core-test :as core-test]))
+            [ring-live-reload-middleware.core-test :as core-test]
+            [ring-live-reload-middleware.test-utils.etaoin-utils :as utils.etaoin]))
 
 (def plaintext-response
   {:status  200
@@ -69,4 +70,9 @@
             (etaoin/go driver url)
 
             (testing "The middleware injects a <script> tag"
-              (is (etaoin/exists? driver {:tag "script"})))))))))
+              (is (etaoin/exists? driver {:tag "script"})))
+
+            (testing "The script logs a _starting_ message."
+              ; The script should emit a log message before doing anything else
+              ; so that we can ensure that it is running on the client.
+              (is (contains? (set (utils.etaoin/get-console-log-strings driver)) "Starting...")))))))))

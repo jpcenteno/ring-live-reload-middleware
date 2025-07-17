@@ -17,7 +17,7 @@
 
 (defn- inject-live-reload-script
   [response]
-  (update response :body #(str % "<script></script>")))
+  (update response :body #(str % "<script>console.log('Starting...');</script>")))
 
 (defn wrap-inject-live-reload-script
   "Ring middleware that injects the live-reload script into HTML responses."
