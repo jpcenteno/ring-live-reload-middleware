@@ -1,3 +1,4 @@
 #kaocha/v1
- {:plugins [:orchestra]
+ {:source-paths ["test/clj"]
+  :plugins [:orchestra]
   :reporter [kaocha.report/documentation]}
