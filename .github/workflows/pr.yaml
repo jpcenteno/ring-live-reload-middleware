@@ -25,5 +25,8 @@ jobs:
       - name: Run flake checks
         run: "nix flake check"
 
+      - name: Build client script
+        run: "nix develop --command -- ./scripts/cljs-compile.sh"
+
       - name: Run tests
         run: "nix develop --command -- ./scripts/test"
