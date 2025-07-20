@@ -1,0 +1,5 @@
+{:source-paths ["src/cljs"]
+ :builds {:client
+          {:target     :browser
+           :output-dir "resources/public/"
+           :modules    {:main {:init-fn ring-live-reload-middleware.client/main}}}}}

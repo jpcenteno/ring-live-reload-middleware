@@ -13,4 +13,4 @@
 (defn wrap-live-reload
   [handler *reloader]
   (-> handler
-      frontend-middleware/wrap-inject-live-reload-script))
+      frontend-middleware/wrap-client))
