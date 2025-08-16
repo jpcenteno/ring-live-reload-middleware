@@ -1,7 +1,6 @@
 (ns ring-live-reload-middleware.implementation.middleware.inject-test
   (:require [clojure.test :refer [deftest is testing]]
             [ring-live-reload-middleware.implementation.middleware.inject :as sut]
-            [ring.util.response :as response]
             [clojure.string :as str]))
 
 ; ╔════════════════════════════════════════════════════════════════════════╗
@@ -31,13 +30,6 @@
     "application/json"
     "application/javascript"
     "text/plain"]))
-
-; ╔════════════════════════════════════════════════════════════════════════╗
-; ║ Test Helpers                                                           ║
-; ╚═══════════════════════════════════════════════════════════════════════╝
-
-(defn- blank-string? [x]
-  (and (string? x) (str/blank? x)))
 
 ; ╔════════════════════════════════════════════════════════════════════════╗
 ; ║ Unit tests                                                             ║
