@@ -4,7 +4,7 @@
    [ring-live-reload-middleware.implementation.state :as state]
    [ring-live-reload-middleware.implementation.middleware.serve-script :as middleware.serve-script]
    [ring-live-reload-middleware.implementation.middleware.serve-channel :as middleware.serve-channel]
-   [ring-live-reload-middleware.implementation.frontend-middleware :as frontend-middleware]))
+   [ring-live-reload-middleware.implementation.middleware.inject :as middleware.inject]))
 
 (s/def ::*state ::state/*state)
 
@@ -34,6 +34,6 @@
 (defn wrap-live-reload ; FIXME rename to `wrap`
   [handler *state]
   (-> handler
-      frontend-middleware/wrap-client ; FIXME rename to middleware.inject
+      middleware.inject/wrap-client ; FIXME rename to middleware.inject
       middleware.serve-script/wrap
       middleware.serve-channel/wrap))

@@ -2,21 +2,21 @@
   (:require [clojure.test :refer [deftest is testing]]
             [ring-live-reload-middleware.core :as sut]
             [clojure.string :as str]
-            [ring-live-reload-middleware.implementation.frontend-middleware-test :as frontend-middleware-test]))
+            [ring-live-reload-middleware.implementation.middleware.inject-test :as middleware.inject-test]))
 
 ; ╔════════════════════════════════════════════════════════════════════════╗
 ; ║ Test responses                                                         ║
 ; ╚════════════════════════════════════════════════════════════════════════╝
 
 (def plaintext-responses
-  (for [content-type frontend-middleware-test/non-html-content-types]
+  (for [content-type middleware.inject-test/non-html-content-types]
     {:status  200
      :headers {"Content-Type" content-type}
      :body    "Hello"}))
 
 ;; A collection of different formats of valid (ish) html responses.
 (def html-responses
-  (for [content-type frontend-middleware-test/valid-html-content-types
+  (for [content-type middleware.inject-test/valid-html-content-types
         body-meta    [{:description "well-formed HTML file"
                        :body        "<!DOCTYPE html><html><head></head><body>Hello HTML</body></html>"}
                       {:description "HTML file without a <head> tag"

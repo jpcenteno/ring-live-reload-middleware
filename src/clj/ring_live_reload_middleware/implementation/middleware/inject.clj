@@ -1,4 +1,4 @@
-(ns ring-live-reload-middleware.implementation.frontend-middleware
+(ns ring-live-reload-middleware.implementation.middleware.inject
   "This namespace provides a Ring middleware that:
     - Injects the client-side _live reload_ script into HTML responses.
     - Intercepts and serves requests for the client-side _live reload_ script.
