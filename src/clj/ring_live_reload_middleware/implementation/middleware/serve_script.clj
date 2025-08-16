@@ -1,6 +1,5 @@
 (ns ring-live-reload-middleware.implementation.middleware.serve-script
   (:require [clojure.spec.alpha :as s]
-
             [ring.util.response :as response]))
 
 (def uri "/ring-live-reload-client.js")
@@ -8,11 +7,11 @@
 ; Resource path to the client-side JS script.
 (def ^:private script-resource-path "public/main.js")
 
-(s/fdef handle-serve-client-script
+(s/fdef script-response
   :args nil?
   :ret  response/response?)
 
-(defn- handle-serve-client-script
+(defn- script-response
   []
   (-> script-resource-path
       response/resource-response
@@ -29,5 +28,5 @@
   [handler]
   (fn [request]
     (if (= uri (:uri request))
-      (handle-serve-client-script)
+      (script-response)
       (handler request))))
