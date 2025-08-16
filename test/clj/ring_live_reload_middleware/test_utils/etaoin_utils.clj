@@ -8,8 +8,9 @@
 
 (defn- clean-console-log-message-str
   [s]
-  (let [[_ _ _ message] (re-matches #"^(\S+)\s+(\S+)\s+\"(.*)\"$" s)]
-    (clojure.string/replace message #"\\\"" "\"")))
+  (if-let [[_ message] (re-matches #"^\S+\s+\S+\s+\"(.*)\".*" s)]
+    (clojure.string/replace message #"\\\"" "\"")
+    s))
 
 (defn- clean-console-log-message
   [log-map]
