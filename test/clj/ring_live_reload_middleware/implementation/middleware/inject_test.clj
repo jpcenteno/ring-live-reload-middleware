@@ -1,6 +1,6 @@
-(ns ring-live-reload-middleware.implementation.frontend-middleware-test
+(ns ring-live-reload-middleware.implementation.middleware.inject-test
   (:require [clojure.test :refer [deftest is testing]]
-            [ring-live-reload-middleware.implementation.frontend-middleware :as sut]
+            [ring-live-reload-middleware.implementation.middleware.inject :as sut]
             [ring.util.response :as response]
             [clojure.string :as str]))
 

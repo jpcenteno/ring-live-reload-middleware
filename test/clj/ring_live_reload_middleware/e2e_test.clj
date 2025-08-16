@@ -39,7 +39,7 @@
     (with-server
       :handler
       (-> (fn [_request] plaintext-response)
-          (sut/wrap-live-reload :fixme-reloader))
+          (sut/wrap-live-reload (sut/start!)))
 
       :callback
       (fn [url]
@@ -62,7 +62,7 @@
       (with-server
         :handler
         (-> (fn [_request] response)
-            (sut/wrap-live-reload :fixme-reloader))
+            (sut/wrap-live-reload (sut/start!)))
 
         :callback
         (fn [url]

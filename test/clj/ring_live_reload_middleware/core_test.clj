@@ -2,21 +2,21 @@
   (:require [clojure.test :refer [deftest is testing]]
             [ring-live-reload-middleware.core :as sut]
             [clojure.string :as str]
-            [ring-live-reload-middleware.implementation.frontend-middleware-test :as frontend-middleware-test]))
+            [ring-live-reload-middleware.implementation.middleware.inject-test :as middleware.inject-test]))
 
 ; ╔════════════════════════════════════════════════════════════════════════╗
 ; ║ Test responses                                                         ║
 ; ╚════════════════════════════════════════════════════════════════════════╝
 
 (def plaintext-responses
-  (for [content-type frontend-middleware-test/non-html-content-types]
+  (for [content-type middleware.inject-test/non-html-content-types]
     {:status  200
      :headers {"Content-Type" content-type}
      :body    "Hello"}))
 
 ;; A collection of different formats of valid (ish) html responses.
 (def html-responses
-  (for [content-type frontend-middleware-test/valid-html-content-types
+  (for [content-type middleware.inject-test/valid-html-content-types
         body-meta    [{:description "well-formed HTML file"
                        :body        "<!DOCTYPE html><html><head></head><body>Hello HTML</body></html>"}
                       {:description "HTML file without a <head> tag"
@@ -54,7 +54,7 @@
             [content-type (get-in response [:headers "Content-Type"])]]
       (testing (format  "With `Content-Type` set to `%s`:" content-type)
         (let [handler (-> (fn [_request] response)
-                          (sut/wrap-live-reload :fixme-reloader))]
+                          (sut/wrap-live-reload (sut/start!)))]
           (testing "The middleware does nothing."
             (is (= response (handler :not-a-request-but-it-should-not-matter))))))))
 
@@ -62,7 +62,7 @@
   ;; supported.
   (doseq [response html-responses]
     (testing (str "When wrapping a handler that returns a " (:description response) ":")
-      (let [handler  (sut/wrap-live-reload (fn [_request] response) :fixme-reloader)
+      (let [handler  (sut/wrap-live-reload (fn [_request] response) (sut/start!))
             response (handler :not-a-request-but-it-should-not-matter-here)]
         (testing "The middleware injects a <script> tag"
           (is (includes-a-script? response)))))))
