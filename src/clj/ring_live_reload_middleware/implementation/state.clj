@@ -35,4 +35,4 @@
 (defn ->empty-state
   "Returns a blank instance of `::state`."
   []
-  {::clients nil})
+  {::clients #{}})
